@@ -50,7 +50,7 @@ This extension requires a special workflow in your n8n instance:
 
 ### Security
 
-Tips about secure token storage, etc. _TODO_
+The API uses a Bearer token authentication.
 
 ## Usage
 

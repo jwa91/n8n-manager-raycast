@@ -7,24 +7,24 @@ This document outlines the directory structure of the n8n Raycast extension, des
 ```
 
 src/
-├── commands/       \# Command entry points & primary state management
+├── commands/
 │   └── list-workflows.command.tsx
-├── components/     \# Reusable UI components
+├── components/
 │   └── WorkflowListItem.tsx
-├── logic/          \# Core application logic & action orchestration
+├── logic/
 │   └── workflowActions.ts
-├── services/       \# External API communication (e.g., n8n API)
+├── services/
 │   └── n8nApiService.ts
-├── types.ts        \# Global TypeScript type definitions
-├── utils/          \# Common helper utilities
+├── types.ts
+├── utils/
 │   ├── formatUtils.ts
 │   ├── jsonUtils.ts
 │   └── toastUtils.ts
-├── views/          \# Presentational UI components (screens/forms)
+├── views/
 │   ├── TriggerWorkflowFormView.tsx
 │   ├── WorkflowDetailView.tsx
 │   └── WorkflowListView.tsx
-└── list-workflows.tsx \# Re-exports list-workflows.command.tsx for Raycast
+└── list-workflows.tsx
 
 ```
 
