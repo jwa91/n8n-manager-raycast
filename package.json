@@ -1,0 +1,55 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "n8n-manager",
+  "title": "n8n manager",
+  "description": "Search and execute workflows, display workflow as mermaid diagram",
+  "icon": "command-icon.png",
+  "author": "jwa91",
+  "owner": "janwillemaltink-com",
+  "categories": ["Productivity"],
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "list-workflows",
+      "title": "List workflows",
+      "description": "Lists active n8n workflows",
+      "mode": "view"
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "^1.69.3",
+    "axios": "^1.9.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "20.8.10",
+    "@types/react": "18.2.27",
+    "typescript": "^5.2.2"
+  },
+  "scripts": {
+    "build": "ray build -e dist",
+    "dev": "ray develop",
+    "lint": "biome lint ./src",
+    "format": "biome format --write ./src",
+    "check": "biome check --write ./src",
+    "publish": "npx @raycast/api@latest publish"
+  },
+  "preferences": [
+    {
+      "name": "n8nWebhookUrl",
+      "title": "n8n Webhook URL",
+      "description": "Your n8n workflow manager webhook PRODUCTION URL (e.g., https://n8n.yourdomain.com/webhook/workflow-manager)",
+      "type": "textfield",
+      "required": true,
+      "placeholder": "https://your-n8n-instance.com/webhook/workflow-manager"
+    },
+    {
+      "name": "apiToken",
+      "title": "n8n API Bearer Token",
+      "description": "The Bearer token for your n8n webhook's Header Auth.",
+      "type": "password",
+      "required": true,
+      "placeholder": "Enter your Bearer token"
+    }
+  ]
+}
