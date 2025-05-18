@@ -28,9 +28,7 @@ This extension requires a special workflow in your n8n instance:
 
 1. Log into your n8n instance
 2. Import the [workflow-manager-template.json](https://creators.n8n.io/workflows/4166)
-3. Configure the workflow:
-   - (configuration instructions _TODO_)
-   - (screenshots _TODO_)
+3. Configure the workflow by following the instructions from the sticky notes
 4. Activate the workflow and note the webhook URL
 
 ### 2. Install the Raycast Extension
@@ -46,33 +44,56 @@ This extension requires a special workflow in your n8n instance:
 ### Settings Explained
 
 - **n8n Webhook URL**: The full URL of your workflow manager webhook (e.g., `https://n8n.yourdomain.com/webhook/workflow-manager`)
+  _! make sure you copy the *production* webhook url_
 - **n8n API Bearer Token**: The token for authentication with your n8n instance
 
 ### Security
 
 The API uses a Bearer token authentication.
+_! make sure to chose a strong key for it_
 
 ## Usage
 
+### First use
+
+If you use the extension for the first time, you will be asked for a webhoook url and a Bearer key:
+
+![First Use](metadata/welcome-first-use.png)
+
 ### Searching and Filtering Workflows
 
-(Explanation and screenshots) _TODO_
+The `list workflows` command by default shows all active workflows:
+
+![list  workflows](metadata/list-workflows.png)
+
+Inactive workflows can be listed from the dropdown:
+
+![list  workflows status](metadata/list-workflows-status-dropdown.png)
+
+Workflows can be searched by both name and id:
+
+![list  workflows search](metadata/list-workflows-search.png)
 
 ### Executing Workflows
 
-(Explanation and screenshots) _TODO_
-
 #### Quick Execute
 
-(Explanation) _TODO_
+THis is the default action for workflows; the action assumes no mandatory input for execution
+
+![Execute quick](metadata/execute-workflow-pending.png)
 
 #### Execute with JSON
 
-(Explanation with examples) _TODO_
+If workflows need specific input to be executed, this input can be provided in json format from this action
+_Note: a better way of handling those kinds of workflows is on the roadmap_
+
+![Execute with input](metadata/execute-with-input.png)
 
 ### Viewing Workflow Details
 
-(Explanation and screenshots) _TODO_
+Workflows can also be inspected within raycast with this action; the provided info will be enhanced in the comming weeks
+
+![Inspect workflow](metadata/inspect-workflow.png)
 
 ## Roadmap
 
