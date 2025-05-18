@@ -20,14 +20,16 @@ function _convertResponseToStringForCopy(responseData: unknown): string {
   if (typeof responseData === "object") {
     try {
       return JSON.stringify(responseData, null, 2);
-    } catch (e) {
+    } catch {
+      // Optional catch binding: error object 'e' is omitted
       return "[Error: Could not stringify response object]";
     }
   }
   // For other types (boolean, number, etc.), attempt to convert to string.
   try {
     return String(responseData);
-  } catch (e) {
+  } catch {
+    // Optional catch binding: error object 'e' is omitted
     return "[Error: Could not convert response to string]";
   }
 }
@@ -74,7 +76,8 @@ export function getN8nInstanceBaseUrl(preferences: Preferences): string {
     try {
       const parsedUrl = new URL(preferences.n8nWebhookUrl);
       return `${parsedUrl.protocol}//${parsedUrl.host}`;
-    } catch (e) {
+    } catch {
+      // Optional catch binding: error object 'e' is omitted
       // Intentionally suppress error logging here; empty string return indicates failure.
       return "";
     }

@@ -63,12 +63,12 @@ export function WorkflowListItem({
               onAction={() => onQuickExecute(workflow)}
             />
             <Action
-              title="Execute Workflow with JSON..."
+              title="Execute Workflow with JSON…"
               icon={Icon.Play}
               onAction={() => onExecuteWithJson(workflow)}
             />
             <Action
-              title="Inspect Workflow..."
+              title="Inspect Workflow…"
               icon={Icon.BlankDocument}
               onAction={() => onInspect(workflow)}
             />
@@ -76,7 +76,7 @@ export function WorkflowListItem({
           <ActionPanel.Section title="General">
             {n8nInstanceHost && (
               <Action.OpenInBrowser
-                title="Open in n8n"
+                title="Open in N8n"
                 icon={Icon.Globe}
                 url={`${n8nInstanceHost}/workflow/${workflow.id}`}
               />
@@ -89,7 +89,7 @@ export function WorkflowListItem({
             />
             {n8nInstanceHost && (
               <Action.OpenInBrowser
-                title="Open n8n Instance Home"
+                title="Open N8n Instance Home"
                 url={n8nInstanceHost}
                 icon={Icon.House}
                 shortcut={{ modifiers: ["opt", "shift"], key: "h" }}

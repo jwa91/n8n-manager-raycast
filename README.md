@@ -59,21 +59,21 @@ _! make sure to chose a strong key for it_
 
 If you use the extension for the first time, you will be asked for a webhoook url and a Bearer key:
 
-![First Use](metadata/welcome-first-use.png)
+![First Use](media/welcome-first-use.png)
 
 ### Searching and Filtering Workflows
 
 The `list workflows` command by default shows all active workflows:
 
-![list  workflows](metadata/list-workflows.png)
+![list  workflows](media/list-workflows.png)
 
 Inactive workflows can be listed from the dropdown:
 
-![list  workflows status](metadata/list-workflows-status-dropdown.png)
+![list  workflows status](media/list-workflows-status-dropdown.png)
 
 Workflows can be searched by both name and id:
 
-![list  workflows search](metadata/list-workflows-search.png)
+![list  workflows search](media/list-workflows-search.png)
 
 ### Executing Workflows
 
@@ -81,20 +81,20 @@ Workflows can be searched by both name and id:
 
 THis is the default action for workflows; the action assumes no mandatory input for execution
 
-![Execute quick](metadata/execute-workflow-pending.png)
+![Execute quick](media/execute-workflow-pending.png)
 
 #### Execute with JSON
 
 If workflows need specific input to be executed, this input can be provided in json format from this action
 _Note: a better way of handling those kinds of workflows is on the roadmap_
 
-![Execute with input](metadata/execute-with-input.png)
+![Execute with input](media/execute-with-input.png)
 
 ### Viewing Workflow Details
 
 Workflows can also be inspected within raycast with this action; the provided info will be enhanced in the comming weeks
 
-![Inspect workflow](metadata/inspect-workflow.png)
+![Inspect workflow](media/inspect-workflow.png)
 
 ## Roadmap
 
@@ -119,9 +119,9 @@ This project includes detailed documentation about its structure and code conven
 Instructions for setting up the development environment:
 
 1. Clone the repository
-2. Install dependencies with `pnpm install`
+2. Install dependencies with `npm install`
 3. Configure your dev environment
-4. Start development with `pnpm dev`
+4. Start development with `npm run dev`
 
 ## License
 
