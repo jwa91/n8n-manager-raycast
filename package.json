@@ -7,12 +7,14 @@
   "icon": "command-icon.png",
   "author": "jwa91",
   "owner": "janwillemaltink-com",
-  "categories": ["Productivity"],
+  "categories": [
+    "Productivity"
+  ],
   "license": "MIT",
   "commands": [
     {
       "name": "list-workflows",
-      "title": "List workflows",
+      "title": "List Workflows",
       "description": "Lists active n8n workflows",
       "mode": "view"
     }
@@ -23,8 +25,11 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@raycast/eslint-config": "^2.0.4",
     "@types/node": "20.8.10",
     "@types/react": "18.2.27",
+    "eslint": "^9.27.0",
+    "prettier": "^3.5.3",
     "typescript": "^5.2.2"
   },
   "scripts": {
