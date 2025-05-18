@@ -1,22 +1,35 @@
 // src/views/TriggerWorkflowFormView.tsx
 // This view component renders the form used to trigger an n8n workflow, optionally with JSON data.
 
-import { Action, ActionPanel, Clipboard, Form, Icon, type Toast, useNavigation } from "@raycast/api"
-import { useCallback, useEffect, useState } from "react"
-import * as workflowActions from "../logic/workflowActions"
-import type { TriggerActionResult, WorkflowSummary } from "../types"
-import { parseJsonInput } from "../utils/jsonUtils"
-import { hideToast, showErrorToast, showLoadingToast, showSuccessToast } from "../utils/toastUtils"
+import {
+  Action,
+  ActionPanel,
+  Clipboard,
+  Form,
+  Icon,
+  type Toast,
+  useNavigation,
+} from "@raycast/api";
+import { useCallback, useEffect, useState } from "react";
+import * as workflowActions from "../logic/workflowActions";
+import type { TriggerActionResult, WorkflowSummary } from "../types";
+import { parseJsonInput } from "../utils/jsonUtils";
+import {
+  hideToast,
+  showErrorToast,
+  showLoadingToast,
+  showSuccessToast,
+} from "../utils/toastUtils";
 
 /**
  * Props for the `TriggerWorkflowFormView` component.
  */
 export interface TriggerWorkflowFormViewProps {
   /** Optional: The ID of the workflow to pre-select in the form. */
-  initialWorkflowId?: string
+  initialWorkflowId?: string;
   /** Optional: The name of the workflow to display if `initialWorkflowId` is provided,
    * useful before the full workflow list is loaded. */
-  initialWorkflowName?: string
+  initialWorkflowName?: string;
 }
 
 /**
@@ -34,16 +47,18 @@ function determineNewSelectedWorkflowId(
   initialPropId: string | undefined,
 ): string {
   if (initialPropId) {
-    return initialPropId
+    return initialPropId;
   }
   if (fetchedWorkflows.length > 0) {
-    const isCurrentStillValid = fetchedWorkflows.some((wf) => wf.id === currentSelectedId)
+    const isCurrentStillValid = fetchedWorkflows.some(
+      (wf) => wf.id === currentSelectedId,
+    );
     if (currentSelectedId && isCurrentStillValid) {
-      return currentSelectedId
+      return currentSelectedId;
     }
-    return fetchedWorkflows[0].id // Default to first if current is invalid or not set.
+    return fetchedWorkflows[0].id; // Default to first if current is invalid or not set.
   }
-  return currentSelectedId || "" // Fallback if no workflows fetched or retain current.
+  return currentSelectedId || ""; // Fallback if no workflows fetched or retain current.
 }
 
 /**
@@ -58,13 +73,13 @@ async function showTriggerSuccessFeedback(
   workflowDisplayName: string,
   popNavigation: () => void,
 ) {
-  let fullResponseForCopy = ""
+  let fullResponseForCopy = "";
   if (result.responseDataToCopy !== undefined) {
     try {
-      fullResponseForCopy = JSON.stringify(result.responseDataToCopy, null, 2)
+      fullResponseForCopy = JSON.stringify(result.responseDataToCopy, null, 2);
     } catch {
       // Fallback to string conversion if JSON.stringify fails (e.g., for non-plain objects).
-      fullResponseForCopy = String(result.responseDataToCopy)
+      fullResponseForCopy = String(result.responseDataToCopy);
     }
   }
 
@@ -72,14 +87,14 @@ async function showTriggerSuccessFeedback(
     await showSuccessToast(workflowDisplayName, result.message, {
       title: "Copy Full Response",
       onAction: (toastInstance) => {
-        Clipboard.copy(fullResponseForCopy)
-        toastInstance.title = "Response Copied!"
+        Clipboard.copy(fullResponseForCopy);
+        toastInstance.title = "Response Copied!";
       },
-    })
+    });
   } else {
-    await showSuccessToast(workflowDisplayName, result.message)
+    await showSuccessToast(workflowDisplayName, result.message);
   }
-  popNavigation()
+  popNavigation();
 }
 
 /**
@@ -87,108 +102,124 @@ async function showTriggerSuccessFeedback(
  * It handles fetching workflows for selection, input validation, and orchestrating the trigger action.
  */
 export function TriggerWorkflowFormView(props: TriggerWorkflowFormViewProps) {
-  const { initialWorkflowId, initialWorkflowName } = props
-  const { pop } = useNavigation() // Hook for programmatic navigation.
+  const { initialWorkflowId, initialWorkflowName } = props;
+  const { pop } = useNavigation(); // Hook for programmatic navigation.
 
   // State for the list of available workflows in the dropdown.
-  const [workflows, setWorkflows] = useState<WorkflowSummary[]>([])
+  const [workflows, setWorkflows] = useState<WorkflowSummary[]>([]);
   // State to manage the loading indicator for the workflow dropdown.
-  const [isLoadingWorkflows, setIsLoadingWorkflows] = useState<boolean>(true)
+  const [isLoadingWorkflows, setIsLoadingWorkflows] = useState<boolean>(true);
   // State for the currently selected workflow ID in the dropdown.
-  const [selectedWorkflowId, setSelectedWorkflowId] = useState<string>(initialWorkflowId || "")
+  const [selectedWorkflowId, setSelectedWorkflowId] = useState<string>(
+    initialWorkflowId || "",
+  );
   // State for the JSON data input by the user.
-  const [jsonData, setJsonData] = useState<string>("")
+  const [jsonData, setJsonData] = useState<string>("");
   // State for displaying any validation errors related to the JSON input.
-  const [jsonDataError, setJsonDataError] = useState<string | undefined>()
+  const [jsonDataError, setJsonDataError] = useState<string | undefined>();
 
   // Effect to load workflows for the dropdown when the component mounts or initialWorkflowId changes.
   useEffect(() => {
     const fetchAndSetWorkflows = async () => {
-      setIsLoadingWorkflows(true)
+      setIsLoadingWorkflows(true);
       try {
-        const fetched = await workflowActions.getWorkflowsForSelection()
-        setWorkflows(fetched)
+        const fetched = await workflowActions.getWorkflowsForSelection();
+        setWorkflows(fetched);
         setSelectedWorkflowId((currentId) =>
           determineNewSelectedWorkflowId(fetched, currentId, initialWorkflowId),
-        )
+        );
       } catch (error) {
         showErrorToast(
           "Failed to load workflows",
           error instanceof Error ? error.message : String(error),
-        )
-        setWorkflows([]) // Clear workflows on error to prevent stale data.
+        );
+        setWorkflows([]); // Clear workflows on error to prevent stale data.
       } finally {
-        setIsLoadingWorkflows(false)
+        setIsLoadingWorkflows(false);
       }
-    }
-    fetchAndSetWorkflows()
+    };
+    fetchAndSetWorkflows();
     // This effect depends on initialWorkflowId to re-fetch/re-evaluate if a specific workflow is passed.
-  }, [initialWorkflowId])
+  }, [initialWorkflowId]);
 
   // Memoized function to get the display name of the currently selected workflow.
   const getSelectedWorkflowDisplayName = useCallback((): string => {
-    const selectedWF = workflows.find((wf) => wf.id === selectedWorkflowId)
+    const selectedWF = workflows.find((wf) => wf.id === selectedWorkflowId);
     // Prioritize initialWorkflowName if it matches the ID, useful if workflows list is loading.
     if (selectedWorkflowId === initialWorkflowId && initialWorkflowName) {
-      return initialWorkflowName
+      return initialWorkflowName;
     }
-    return selectedWF?.name || initialWorkflowName || selectedWorkflowId || "Selected Workflow"
-  }, [workflows, selectedWorkflowId, initialWorkflowId, initialWorkflowName])
+    return (
+      selectedWF?.name ||
+      initialWorkflowName ||
+      selectedWorkflowId ||
+      "Selected Workflow"
+    );
+  }, [workflows, selectedWorkflowId, initialWorkflowId, initialWorkflowName]);
 
   // Handles the core logic of submitting the workflow trigger request.
   const performSubmit = async () => {
-    const workflowDisplayName = getSelectedWorkflowDisplayName()
-    let loadingToastInstance: Toast | undefined
+    const workflowDisplayName = getSelectedWorkflowDisplayName();
+    let loadingToastInstance: Toast | undefined;
 
     try {
-      loadingToastInstance = await showLoadingToast(`Triggering: ${workflowDisplayName}...`)
+      loadingToastInstance = await showLoadingToast(
+        `Triggering: ${workflowDisplayName}...`,
+      );
       const result = await workflowActions.triggerWorkflowWithJson(
         selectedWorkflowId,
         workflowDisplayName,
         jsonData,
-      )
-      if (loadingToastInstance) await hideToast(loadingToastInstance) // Hide loading toast before showing success/error.
-      await showTriggerSuccessFeedback(result, workflowDisplayName, pop)
+      );
+      if (loadingToastInstance) await hideToast(loadingToastInstance); // Hide loading toast before showing success/error.
+      await showTriggerSuccessFeedback(result, workflowDisplayName, pop);
     } catch (error) {
-      if (loadingToastInstance) await hideToast(loadingToastInstance)
+      if (loadingToastInstance) await hideToast(loadingToastInstance);
       await showErrorToast(
         `Failed to trigger ${workflowDisplayName}`,
         error instanceof Error ? error.message : String(error),
-      )
+      );
     }
-  }
+  };
 
   // Validates inputs and then calls performSubmit.
   const handleSubmit = async () => {
     if (!selectedWorkflowId) {
-      await showErrorToast("No Workflow Selected", "Please select a workflow to trigger.")
-      return
+      await showErrorToast(
+        "No Workflow Selected",
+        "Please select a workflow to trigger.",
+      );
+      return;
     }
-    const { error: jsonParseErrorVal } = parseJsonInput(jsonData) // Validate JSON input.
+    const { error: jsonParseErrorVal } = parseJsonInput(jsonData); // Validate JSON input.
     if (jsonParseErrorVal) {
-      setJsonDataError(jsonParseErrorVal)
-      return
+      setJsonDataError(jsonParseErrorVal);
+      return;
     }
-    setJsonDataError(undefined) // Clear any previous JSON error.
-    await performSubmit()
-  }
+    setJsonDataError(undefined); // Clear any previous JSON error.
+    await performSubmit();
+  };
 
   // Validates JSON input when the text area loses focus.
   const handleJsonBlur = useCallback(() => {
     if (jsonData.trim() === "") {
-      setJsonDataError(undefined) // Clear error if input is empty.
-      return
+      setJsonDataError(undefined); // Clear error if input is empty.
+      return;
     }
-    const { error: jsonErrorOnBlur } = parseJsonInput(jsonData)
-    setJsonDataError(jsonErrorOnBlur)
-  }, [jsonData]) // Depends on the current jsonData.
+    const { error: jsonErrorOnBlur } = parseJsonInput(jsonData);
+    setJsonDataError(jsonErrorOnBlur);
+  }, [jsonData]); // Depends on the current jsonData.
 
   // Determines the navigation title based on the selected workflow.
-  const currentWorkflowForTitle = workflows.find((wf) => wf.id === selectedWorkflowId)
+  const currentWorkflowForTitle = workflows.find(
+    (wf) => wf.id === selectedWorkflowId,
+  );
   const navigationTitleDisplay =
     currentWorkflowForTitle?.name ||
-    (selectedWorkflowId === initialWorkflowId ? initialWorkflowName : undefined) || // Use initial name if selection matches and list not fully resolved
-    "Trigger n8n Workflow"
+    (selectedWorkflowId === initialWorkflowId
+      ? initialWorkflowName
+      : undefined) || // Use initial name if selection matches and list not fully resolved
+    "Trigger n8n Workflow";
 
   return (
     <Form
@@ -200,7 +231,11 @@ export function TriggerWorkflowFormView(props: TriggerWorkflowFormViewProps) {
       }
       actions={
         <ActionPanel>
-          <Action.SubmitForm title="Trigger Workflow" icon={Icon.Play} onSubmit={handleSubmit} />
+          <Action.SubmitForm
+            title="Trigger Workflow"
+            icon={Icon.Play}
+            onSubmit={handleSubmit}
+          />
         </ActionPanel>
       }
     >
@@ -253,5 +288,5 @@ export function TriggerWorkflowFormView(props: TriggerWorkflowFormViewProps) {
         onBlur={handleJsonBlur} // Provide live validation feedback.
       />
     </Form>
-  )
+  );
 }

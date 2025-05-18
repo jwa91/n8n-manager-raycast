@@ -7,15 +7,21 @@
  * @param jsonStr The JSON string to parse.
  * @returns An object with 'data' (parsed JSON) or 'error' (error message).
  */
-export function parseJsonInput(jsonStr: string): { data?: unknown; error?: string } {
+export function parseJsonInput(jsonStr: string): {
+  data?: unknown;
+  error?: string;
+} {
   if (jsonStr.trim() === "") {
-    return { data: undefined } // Successfully "parsed" an empty input as no data
+    return { data: undefined }; // Successfully "parsed" an empty input as no data
   }
   try {
-    return { data: JSON.parse(jsonStr) }
+    return { data: JSON.parse(jsonStr) };
   } catch (e) {
     // Check if the error is an instance of Error to safely access its message property
-    const errorMessage = e instanceof Error ? e.message : "Unknown JSON parsing error"
-    return { error: `Invalid JSON format: ${errorMessage}. Please correct or leave empty.` }
+    const errorMessage =
+      e instanceof Error ? e.message : "Unknown JSON parsing error";
+    return {
+      error: `Invalid JSON format: ${errorMessage}. Please correct or leave empty.`,
+    };
   }
 }

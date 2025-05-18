@@ -2,14 +2,13 @@
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "n8n-manager",
   "version": "0.0.1",
-  "title": "n8n manager",
+  "type": "module",
+  "title": "N8n Manager",
   "description": "Search and execute workflows, display workflow as mermaid diagram",
   "icon": "command-icon.png",
   "author": "jwa91",
   "owner": "janwillemaltink-com",
-  "categories": [
-    "Productivity"
-  ],
+  "categories": ["Productivity"],
   "license": "MIT",
   "commands": [
     {
@@ -26,9 +25,10 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@raycast/eslint-config": "^2.0.4",
-    "@types/node": "20.8.10",
-    "@types/react": "18.2.27",
+    "@types/node": "22.15.18",
+    "@types/react": "19.1.4",
     "eslint": "^9.27.0",
+    "globals": "^16.1.0",
     "prettier": "^3.5.3",
     "typescript": "^5.2.2"
   },

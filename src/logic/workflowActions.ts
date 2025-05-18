@@ -1,15 +1,15 @@
 // src/logic/workflowActions.ts
 // This module orchestrates application logic by calling API services and utilities.
 
-import * as n8nApiService from "../services/n8nApiService"
+import * as n8nApiService from "../services/n8nApiService";
 import type {
   N8nApiPathParams,
   QuickTriggerActionResult,
   TriggerActionResult,
   WorkflowFull,
   WorkflowSummary,
-} from "../types"
-import { parseJsonInput } from "../utils/jsonUtils"
+} from "../types";
+import { parseJsonInput } from "../utils/jsonUtils";
 
 /**
  * Fetches a list of workflows, optionally filtered by status and searched by text.
@@ -24,7 +24,7 @@ export async function listWorkflows(
   searchText?: string,
 ): Promise<WorkflowSummary[] | WorkflowSummary> {
   // Errors from n8nApiService.searchWorkflows will propagate.
-  return n8nApiService.searchWorkflows(filter, searchText)
+  return n8nApiService.searchWorkflows(filter, searchText);
 }
 
 /**
@@ -33,9 +33,11 @@ export async function listWorkflows(
  * @returns A Promise resolving to the WorkflowFull object, or null if the workflow is not found.
  * @throws Error if the underlying API call fails, allowing the caller to handle UI feedback.
  */
-export async function getWorkflowDetails(workflowId: string): Promise<WorkflowFull | null> {
+export async function getWorkflowDetails(
+  workflowId: string,
+): Promise<WorkflowFull | null> {
   // Errors from n8nApiService.getWorkflowDetails will propagate.
-  return n8nApiService.getWorkflowDetails(workflowId)
+  return n8nApiService.getWorkflowDetails(workflowId);
 }
 
 /**
@@ -50,12 +52,15 @@ export async function quickTriggerWorkflow(
   workflowName: string,
 ): Promise<QuickTriggerActionResult> {
   // Errors from n8nApiService.triggerWorkflowExecution will propagate.
-  await n8nApiService.triggerWorkflowExecution(workflowId, undefined /* no data */)
+  await n8nApiService.triggerWorkflowExecution(
+    workflowId,
+    undefined /* no data */,
+  );
   // If the above call does not throw, consider it a success from the perspective of this action.
   return {
     success: true,
     message: `Workflow "${workflowName}" was triggered successfully.`,
-  }
+  };
 }
 
 /**
@@ -71,20 +76,24 @@ export async function triggerWorkflowWithJson(
   workflowName: string,
   jsonDataString: string,
 ): Promise<TriggerActionResult> {
-  const { data: parsedJsonData, error: jsonParseError } = parseJsonInput(jsonDataString)
+  const { data: parsedJsonData, error: jsonParseError } =
+    parseJsonInput(jsonDataString);
 
   if (jsonParseError) {
     // Handle JSON parsing error specifically before attempting API call.
-    throw new Error(jsonParseError)
+    throw new Error(jsonParseError);
   }
 
   // Errors from n8nApiService.triggerWorkflowExecution will propagate.
-  const apiResponseData = await n8nApiService.triggerWorkflowExecution(workflowId, parsedJsonData)
+  const apiResponseData = await n8nApiService.triggerWorkflowExecution(
+    workflowId,
+    parsedJsonData,
+  );
   return {
     success: true,
     message: `Workflow "${workflowName}" triggered successfully with JSON data.`,
     responseDataToCopy: apiResponseData,
-  }
+  };
 }
 
 /**
@@ -95,5 +104,5 @@ export async function triggerWorkflowWithJson(
  */
 export async function getWorkflowsForSelection(): Promise<WorkflowSummary[]> {
   // Errors from n8nApiService.getWorkflowSummaries will propagate.
-  return n8nApiService.getWorkflowSummaries("all")
+  return n8nApiService.getWorkflowSummaries("all");
 }

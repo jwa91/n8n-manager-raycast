@@ -4,6 +4,6 @@
 // It re-exports the actual command component from its new location
 // in the /commands directory to maintain our structured approach.
 
-import ListWorkflowsCommand from "./commands/list-workflows.command"
+import ListWorkflowsCommand from "./commands/list-workflows.command";
 
-export default ListWorkflowsCommand
+export default ListWorkflowsCommand;

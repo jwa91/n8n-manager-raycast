@@ -1,6 +1,6 @@
 // src/utils/toastUtils.ts
 // Centralized helper functions for displaying Raycast toasts.
-import { Toast, showToast as rayShowToast } from "@raycast/api"
+import { Toast, showToast as rayShowToast } from "@raycast/api";
 
 /**
  * Displays a success toast message.
@@ -18,8 +18,8 @@ export async function showSuccessToast(
     title,
     message,
     primaryAction,
-  }
-  await rayShowToast(options)
+  };
+  await rayShowToast(options);
 }
 
 /**
@@ -33,14 +33,14 @@ export async function showErrorToast(
   message?: string | Error,
   primaryAction?: Toast.ActionOptions,
 ): Promise<void> {
-  const toastMessage = message instanceof Error ? message.message : message
+  const toastMessage = message instanceof Error ? message.message : message;
   const options: Toast.Options = {
     style: Toast.Style.Failure,
     title,
     message: toastMessage,
     primaryAction,
-  }
-  await rayShowToast(options)
+  };
+  await rayShowToast(options);
 }
 
 /**
@@ -49,13 +49,16 @@ export async function showErrorToast(
  * @param message - Optional message for the toast.
  * @returns A Promise resolving to the `Toast` instance, which can be used to hide or update it.
  */
-export async function showLoadingToast(title: string, message?: string): Promise<Toast> {
+export async function showLoadingToast(
+  title: string,
+  message?: string,
+): Promise<Toast> {
   const options: Toast.Options = {
     style: Toast.Style.Animated,
     title,
     message,
-  }
-  return rayShowToast(options)
+  };
+  return rayShowToast(options);
 }
 
 /**
@@ -64,7 +67,7 @@ export async function showLoadingToast(title: string, message?: string): Promise
  * @param toast - The toast instance (obtained from `showLoadingToast`) to hide.
  */
 export async function hideToast(toast: Toast): Promise<void> {
-  await toast.hide()
+  await toast.hide();
 }
 
 /**
@@ -73,13 +76,18 @@ export async function hideToast(toast: Toast): Promise<void> {
  * @param toast - The toast instance to update (obtained from `showLoadingToast`).
  * @param options - An object with `Toast.Options` properties to update on the toast.
  */
-export async function updateToast(toast: Toast, options: Partial<Toast.Options>): Promise<void> {
+export async function updateToast(
+  toast: Toast,
+  options: Partial<Toast.Options>,
+): Promise<void> {
   // Update properties of the existing toast object.
   // Raycast's `showToast` mechanism means that modifying these properties
   // on the instance returned by `showToast` will update the visible toast.
-  if (options.title !== undefined) toast.title = options.title
-  if (options.message !== undefined) toast.message = options.message
-  if (options.style !== undefined) toast.style = options.style
-  if (options.primaryAction !== undefined) toast.primaryAction = options.primaryAction
-  if (options.secondaryAction !== undefined) toast.secondaryAction = options.secondaryAction
+  if (options.title !== undefined) toast.title = options.title;
+  if (options.message !== undefined) toast.message = options.message;
+  if (options.style !== undefined) toast.style = options.style;
+  if (options.primaryAction !== undefined)
+    toast.primaryAction = options.primaryAction;
+  if (options.secondaryAction !== undefined)
+    toast.secondaryAction = options.secondaryAction;
 }

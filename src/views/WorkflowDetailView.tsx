@@ -1,21 +1,28 @@
 // src/views/WorkflowDetailView.tsx
 // This view component displays detailed information about a single n8n workflow.
 
-import { Action, ActionPanel, Color, Detail, Icon, getPreferenceValues } from "@raycast/api"
-import { useEffect, useMemo, useState } from "react"
-import * as workflowActions from "../logic/workflowActions"
-import type { Preferences, WorkflowFull } from "../types"
-import { getN8nInstanceBaseUrl } from "../utils/formatUtils"
-import { showErrorToast } from "../utils/toastUtils"
+import {
+  Action,
+  ActionPanel,
+  Color,
+  Detail,
+  Icon,
+  getPreferenceValues,
+} from "@raycast/api";
+import { useEffect, useMemo, useState } from "react";
+import * as workflowActions from "../logic/workflowActions";
+import type { Preferences, WorkflowFull } from "../types";
+import { getN8nInstanceBaseUrl } from "../utils/formatUtils";
+import { showErrorToast } from "../utils/toastUtils";
 
 /**
  * Props for the `WorkflowDetailView` component.
  */
 export interface WorkflowDetailViewProps {
   /** The unique identifier of the workflow to display details for. */
-  workflowId: string
+  workflowId: string;
   /** Optional: The name of the workflow, used for an initial title display while data is loading. */
-  workflowName?: string
+  workflowName?: string;
 }
 
 /**
@@ -23,61 +30,63 @@ export interface WorkflowDetailViewProps {
  * about a specific n8n workflow, using the metadata panel for structured details.
  */
 export function WorkflowDetailView(props: WorkflowDetailViewProps) {
-  const { workflowId, workflowName: initialWorkflowNameFromProps } = props
+  const { workflowId, workflowName: initialWorkflowNameFromProps } = props;
 
-  const [workflow, setWorkflow] = useState<WorkflowFull | null>(null)
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [workflow, setWorkflow] = useState<WorkflowFull | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const preferences = getPreferenceValues<Preferences>()
-  const n8nInstanceHost = getN8nInstanceBaseUrl(preferences)
+  const preferences = getPreferenceValues<Preferences>();
+  const n8nInstanceHost = getN8nInstanceBaseUrl(preferences);
 
   useEffect(() => {
     const fetchDetails = async () => {
       if (!workflowId) {
-        setWorkflow(null)
-        setIsLoading(false)
+        setWorkflow(null);
+        setIsLoading(false);
         showErrorToast(
           "Error Displaying Workflow",
           "No Workflow ID was provided to the detail view.",
-        )
-        return
+        );
+        return;
       }
 
-      setIsLoading(true)
-      setWorkflow(null)
+      setIsLoading(true);
+      setWorkflow(null);
       try {
-        const fetchedWorkflow = await workflowActions.getWorkflowDetails(workflowId)
-        setWorkflow(fetchedWorkflow)
+        const fetchedWorkflow =
+          await workflowActions.getWorkflowDetails(workflowId);
+        setWorkflow(fetchedWorkflow);
       } catch (error) {
         showErrorToast(
           `Failed to fetch details for ${initialWorkflowNameFromProps || workflowId}`,
           error instanceof Error ? error.message : String(error),
-        )
-        setWorkflow(null)
+        );
+        setWorkflow(null);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
+    };
 
-    fetchDetails()
-  }, [workflowId, initialWorkflowNameFromProps])
+    fetchDetails();
+  }, [workflowId, initialWorkflowNameFromProps]);
 
   const markdownContent = useMemo(() => {
     if (isLoading) {
-      return `Loading details for ${initialWorkflowNameFromProps || `workflow ID: ${workflowId}`}...`
+      return `Loading details for ${initialWorkflowNameFromProps || `workflow ID: ${workflowId}`}...`;
     }
     if (!workflow) {
-      return `# Error\n\nDetails for workflow ID \`${workflowId}\` could not be retrieved or found. Please check the ID or your connection.`
+      return `# Error\n\nDetails for workflow ID \`${workflowId}\` could not be retrieved or found. Please check the ID or your connection.`;
     }
     // Main content is just the workflow name; details are in metadata.
-    return `# ${workflow.name}`
-  }, [workflow, isLoading, workflowId, initialWorkflowNameFromProps])
+    return `# ${workflow.name}`;
+  }, [workflow, isLoading, workflowId, initialWorkflowNameFromProps]);
 
-  const navigationTitle = workflow?.name || initialWorkflowNameFromProps || `Workflow ${workflowId}`
+  const navigationTitle =
+    workflow?.name || initialWorkflowNameFromProps || `Workflow ${workflowId}`;
 
-  const nodeCount = workflow?.nodes?.length ?? 0
+  const nodeCount = workflow?.nodes?.length ?? 0;
   const connectionCount = useMemo(() => {
-    if (!workflow?.connections) return 0
+    if (!workflow?.connections) return 0;
     return Object.values(workflow.connections).reduce(
       (totalConnections, nodeConnections) =>
         totalConnections +
@@ -87,8 +96,8 @@ export function WorkflowDetailView(props: WorkflowDetailViewProps) {
           0,
         ),
       0,
-    )
-  }, [workflow?.connections])
+    );
+  }, [workflow?.connections]);
 
   return (
     <Detail
@@ -98,7 +107,11 @@ export function WorkflowDetailView(props: WorkflowDetailViewProps) {
       metadata={
         workflow && !isLoading ? (
           <Detail.Metadata>
-            <Detail.Metadata.Label title="ID" text={workflow.id} icon={Icon.Hashtag} />
+            <Detail.Metadata.Label
+              title="ID"
+              text={workflow.id}
+              icon={Icon.Hashtag}
+            />
             <Detail.Metadata.Label
               title="Active"
               text={
@@ -138,7 +151,10 @@ export function WorkflowDetailView(props: WorkflowDetailViewProps) {
                 <Detail.Metadata.Separator />
                 <Detail.Metadata.TagList title="Tags">
                   {workflow.tags.map((tag) => (
-                    <Detail.Metadata.TagList.Item key={tag.id} text={tag.name} />
+                    <Detail.Metadata.TagList.Item
+                      key={tag.id}
+                      text={tag.name}
+                    />
                   ))}
                 </Detail.Metadata.TagList>
               </>
@@ -174,5 +190,5 @@ export function WorkflowDetailView(props: WorkflowDetailViewProps) {
         ) : null
       }
     />
-  )
+  );
 }

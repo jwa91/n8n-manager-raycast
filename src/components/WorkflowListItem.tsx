@@ -1,23 +1,23 @@
 // src/components/WorkflowListItem.tsx
 // This component renders a single item in the workflow list.
 
-import { Action, ActionPanel, Color, Icon, List } from "@raycast/api"
-import type { WorkflowSummary } from "../types"
+import { Action, ActionPanel, Color, Icon, List } from "@raycast/api";
+import type { WorkflowSummary } from "../types";
 
 /**
  * Props for the `WorkflowListItem` component.
  */
 export interface WorkflowListItemProps {
   /** The workflow data to display. */
-  workflow: WorkflowSummary
+  workflow: WorkflowSummary;
   /** The base URL of the n8n instance, used for generating "Open in n8n" links. */
-  n8nInstanceHost: string
+  n8nInstanceHost: string;
   /** Callback function to execute when the 'Quick Execute' action is triggered. */
-  onQuickExecute: (workflow: WorkflowSummary) => void
+  onQuickExecute: (workflow: WorkflowSummary) => void;
   /** Callback function to execute when the 'Execute with JSON' action is triggered. */
-  onExecuteWithJson: (workflow: WorkflowSummary) => void
+  onExecuteWithJson: (workflow: WorkflowSummary) => void;
   /** Callback function to execute when the 'Inspect Workflow' action is triggered. */
-  onInspect: (workflow: WorkflowSummary) => void
+  onInspect: (workflow: WorkflowSummary) => void;
 }
 
 /**
@@ -47,7 +47,7 @@ export function WorkflowListItem({
           tooltip: `Created At: ${new Date(workflow.createdAt).toLocaleString()}`,
         }
       : null,
-  ].filter(Boolean) as List.Item.Accessory[] // Ensures only non-null accessories are passed
+  ].filter(Boolean) as List.Item.Accessory[]; // Ensures only non-null accessories are passed
 
   return (
     <List.Item
@@ -99,5 +99,5 @@ export function WorkflowListItem({
         </ActionPanel>
       }
     />
-  )
+  );
 }

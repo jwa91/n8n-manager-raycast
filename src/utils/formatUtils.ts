@@ -1,6 +1,6 @@
 // src/utils/formatUtils.ts
 // Helper functions for data formatting and display.
-import type { Preferences } from "../types"
+import type { Preferences } from "../types";
 
 /**
  * @private
@@ -12,23 +12,23 @@ import type { Preferences } from "../types"
  */
 function _convertResponseToStringForCopy(responseData: unknown): string {
   if (responseData === null || responseData === undefined) {
-    return ""
+    return "";
   }
   if (typeof responseData === "string") {
-    return responseData
+    return responseData;
   }
   if (typeof responseData === "object") {
     try {
-      return JSON.stringify(responseData, null, 2)
+      return JSON.stringify(responseData, null, 2);
     } catch (e) {
-      return "[Error: Could not stringify response object]"
+      return "[Error: Could not stringify response object]";
     }
   }
   // For other types (boolean, number, etc.), attempt to convert to string.
   try {
-    return String(responseData)
+    return String(responseData);
   } catch (e) {
-    return "[Error: Could not convert response to string]"
+    return "[Error: Could not convert response to string]";
   }
 }
 
@@ -46,22 +46,22 @@ export function formatTriggerResponseMessage(
   statusText: string,
   workflowDisplayName: string,
 ): { message: string; fullResponseForCopy: string } {
-  const fullResponseForCopy = _convertResponseToStringForCopy(responseData)
-  const SANE_STATUS_TEXT_LIMIT = 50
+  const fullResponseForCopy = _convertResponseToStringForCopy(responseData);
+  const SANE_STATUS_TEXT_LIMIT = 50;
   // Sanitize statusText to prevent overly long messages from unusual API responses.
   const sanitizedStatusText =
-    statusText && statusText.length < SANE_STATUS_TEXT_LIMIT ? statusText : ""
+    statusText && statusText.length < SANE_STATUS_TEXT_LIMIT ? statusText : "";
 
-  let responseMessage: string
+  let responseMessage: string;
 
   if (status >= 200 && status < 300) {
-    responseMessage = `Workflow "${workflowDisplayName}" triggered successfully (Status: ${status}).`
+    responseMessage = `Workflow "${workflowDisplayName}" triggered successfully (Status: ${status}).`;
   } else {
-    const statusPart = `Status: ${status}${sanitizedStatusText ? ` ${sanitizedStatusText}` : ""}`
-    responseMessage = `Workflow "${workflowDisplayName}" trigger attempt finished (${statusPart}). Check details if an error occurred.`
+    const statusPart = `Status: ${status}${sanitizedStatusText ? ` ${sanitizedStatusText}` : ""}`;
+    responseMessage = `Workflow "${workflowDisplayName}" trigger attempt finished (${statusPart}). Check details if an error occurred.`;
   }
 
-  return { message: responseMessage, fullResponseForCopy }
+  return { message: responseMessage, fullResponseForCopy };
 }
 
 /**
@@ -72,12 +72,12 @@ export function formatTriggerResponseMessage(
 export function getN8nInstanceBaseUrl(preferences: Preferences): string {
   if (preferences.n8nWebhookUrl) {
     try {
-      const parsedUrl = new URL(preferences.n8nWebhookUrl)
-      return `${parsedUrl.protocol}//${parsedUrl.host}`
+      const parsedUrl = new URL(preferences.n8nWebhookUrl);
+      return `${parsedUrl.protocol}//${parsedUrl.host}`;
     } catch (e) {
       // Intentionally suppress error logging here; empty string return indicates failure.
-      return ""
+      return "";
     }
   }
-  return ""
+  return "";
 }
