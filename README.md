@@ -34,6 +34,31 @@ This extension requires a special workflow in your n8n instance:
 
 ### 2. Install the Raycast Extension
 
+**⭐ Status: Currently Under Review ⭐**
+
+This extension has been submitted to the Raycast Store and is currently awaiting review. I will update these instructions once it is approved and directly installable from the Store!
+
+**In the meantime, if you'd like to use or test the extension, you can install it locally by following these steps:**
+
+1.  **Clone the Repository:**
+    * Open your terminal and navigate to the directory where you want to place the project.
+    * Run: `git clone https://github.com/jwa91/n8n-manager-raycast` 
+    * Change into the cloned directory: `cd n8n-manager-raycast`
+
+2.  **Install Dependencies:**
+    * Run: `npm install`
+
+3.  **Run in Development Mode:**
+    * Run: `npm run dev`
+    * This command builds the extension and loads it into Raycast in developer mode. Raycast should automatically detect and enable it. You can then access its commands. (If you haven't before, you might need to enable "Developer Mode" for extensions in Raycast's advanced preferences.)
+
+4.  **Configure the Extension:**
+    * The first time you try to use a command from the extension (e.g., "List Workflows"), Raycast will prompt you to enter the required preferences: your "n8n Webhook URL" and "n8n API Bearer Token".
+
+---
+
+**Once approved and available in the Raycast Store, the installation will be simple:**
+
 1. Open Raycast
 2. Go to Store
 3. Search for "n8n Manager"
