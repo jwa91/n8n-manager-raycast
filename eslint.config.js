@@ -1,6 +1,6 @@
-import raycastEslintConfig from "@raycast/eslint-config" // Renamed for clarity
+import raycastConfigArray from "@raycast/eslint-config"; // Renamed for clarity, it's an array
 // eslint.config.js
-import globals from "globals"
+import globals from "globals";
 
 export default [
   {
@@ -11,5 +11,6 @@ export default [
       },
     },
   },
-  ...(Array.isArray(raycastEslintConfig) ? raycastEslintConfig : [raycastEslintConfig]),
-]
+  // Since raycastConfigArray is an array, spread its elements here
+  ...raycastConfigArray,
+];

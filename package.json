@@ -8,7 +8,9 @@
   "icon": "command-icon.png",
   "author": "jwa91",
   "owner": "janwillemaltink-com",
-  "categories": ["Productivity"],
+  "categories": [
+    "Productivity"
+  ],
   "license": "MIT",
   "commands": [
     {
@@ -19,14 +21,13 @@
     }
   ],
   "dependencies": {
-    "@raycast/api": "^1.69.3",
+    "@raycast/api": "^1.98.5",
     "axios": "^1.9.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
     "@raycast/eslint-config": "^2.0.4",
-    "@types/node": "22.15.18",
-    "@types/react": "19.1.4",
+    "@types/node": "^22.15.18",
+    "@types/react": "^19.1.4",
     "eslint": "^9.27.0",
     "globals": "^16.1.0",
     "prettier": "^3.5.3",
@@ -35,9 +36,6 @@
   "scripts": {
     "build": "ray build -e dist",
     "dev": "ray develop",
-    "lint": "biome lint ./src",
-    "format": "biome format --write ./src",
-    "check": "biome check --write ./src",
     "publish": "npx @raycast/api@latest publish"
   },
   "preferences": [
