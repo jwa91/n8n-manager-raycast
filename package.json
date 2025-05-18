@@ -1,7 +1,7 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "n8n-manager",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "type": "module",
   "title": "N8n Manager",
   "description": "Search and execute workflows, display workflow as mermaid diagram",
