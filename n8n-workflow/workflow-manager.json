@@ -1,0 +1,761 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "multipleMethods": true,
+        "path": "workflow-manager",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-1120, -440],
+      "id": "ab47d0ba-0544-4540-a462-70a2ce87143f",
+      "name": "Webhook",
+      "webhookId": "26f7b45b-d6c6-4d26-a72b-28fe0d59c9f3",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "N5JJ2pCqy9s6SMWZ",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c66c5a75-22a3-4b56-b40c-8403ed2dfbd4",
+              "name": "targetWorkflowId",
+              "value": "={{ $json.query.workflowId }}",
+              "type": "string"
+            },
+            {
+              "id": "88ec0d2f-4d99-4307-ae5e-c5d3c1b75b98",
+              "name": "workflowInputData",
+              "value": "={{ $json.body }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-820, -340],
+      "id": "479e7d11-4d29-43d7-9b51-4f15e760a117",
+      "name": "Map webhook request to fields",
+      "alwaysOutputData": false,
+      "onError": "continueErrorOutput",
+      "notes": "dont forget to add logic to triggered workflow if you use custom data."
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "={{ $('Map webhook request to fields').item.json.targetWorkflowId }}",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [-440, -360],
+      "id": "6a685048-6a64-4888-b66b-a3ecb6319ac7",
+      "name": "Execute Workflow",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [20, -460],
+      "id": "db3a0115-179b-4a70-8c27-aa126bfa43a0",
+      "name": "return succes message"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"status\": \"problem_executing_workflow\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [20, -280],
+      "id": "327b7437-e4fa-4b82-97d2-4adf077df5d8",
+      "name": "return problem executing workflow"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"status\": \"problem_handling_request\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [20, -80],
+      "id": "331ce2d8-016f-40ed-8b74-8e75be54fac6",
+      "name": "Return problem handling request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "87d4b5e7-540e-441c-9598-921d6d223e20",
+              "name": "name",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "b3749a8f-0418-4409-8c0f-e8ca2bec9414",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "1db3eaca-95d2-4b5b-9fca-e6ca44eb4bc0",
+              "name": "createdAt",
+              "value": "={{ $json.createdAt }}",
+              "type": "string"
+            },
+            {
+              "id": "a42273df-e9c7-40a3-9f02-63792c0f6da5",
+              "name": "updatedAt",
+              "value": "={{ $json.updatedAt }}",
+              "type": "string"
+            },
+            {
+              "id": "7799575a-df04-4c29-8ee7-b8a6dc9d98d6",
+              "name": "active",
+              "value": "={{ $json.active }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1060, -1140],
+      "id": "eff4c9d9-5031-4d25-87c7-2fcd5a28ada5",
+      "name": "Map key workflow info"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c66c5a75-22a3-4b56-b40c-8403ed2dfbd4",
+              "name": "mode",
+              "value": "={{ $json.query.mode }}",
+              "type": "string"
+            },
+            {
+              "id": "88ec0d2f-4d99-4307-ae5e-c5d3c1b75b98",
+              "name": "workflowId",
+              "value": "={{ $json.query.workflowId }}",
+              "type": "string"
+            },
+            {
+              "id": "219d8188-71da-41a7-b849-a3f45877a94b",
+              "name": "includedWorkflows",
+              "value": "={{ $json.query.includedWorkflows }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-820, -600],
+      "id": "fb406e55-9df4-43ac-b8b7-040e1438b925",
+      "name": "map parameters",
+      "alwaysOutputData": false,
+      "onError": "continueErrorOutput",
+      "notes": "dont forget to add logic to triggered workflow if you use custom data."
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"status\": \"problem_handling_request\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [1340, -680],
+      "id": "84934ca3-eb86-4bda-b16c-1bdbf7b7073e",
+      "name": "Return problem handling get request"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [1320, -1300],
+      "id": "bfd7b91d-4972-48be-8f6d-887995f3e62d",
+      "name": "return all workflow info"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [1320, -1140],
+      "id": "6f481e40-a8c1-40bc-a410-8e3606ac419b",
+      "name": "return summarized workflow info"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "workflowId": {
+          "__rl": true,
+          "value": "={{ $json.workflowId }}",
+          "mode": "id"
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [400, -1240],
+      "id": "4d4bc237-c0e4-456f-acdf-fdaeec203693",
+      "name": "Get specific workflowid",
+      "credentials": {
+        "n8nApi": {
+          "id": "3N1mURaRanSDYYnV",
+          "name": "n8n account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.includedWorkflows }}",
+                    "rightValue": "inactive",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "6daea568-2be3-45ca-be56-ae0207a4f86d"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "inactive"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "5a4debdd-03ac-4c1d-b2b5-ea8192d61717",
+                    "leftValue": "={{ $json.includedWorkflows }}",
+                    "rightValue": "active",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "active"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "98ec6e1b-e5b5-4a9c-b505-23f237cabf9f",
+                    "leftValue": "={{ $json.includedWorkflows }}",
+                    "rightValue": "all",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "all"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Fallback"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [0, -940],
+      "id": "559e5e24-200f-44d1-a8e4-b5605afe81b3",
+      "name": "Included Workflows"
+    },
+    {
+      "parameters": {
+        "filters": {
+          "activeWorkflows": "={{ false }}"
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [400, -1100],
+      "id": "259f7da5-cd06-44a3-805c-bf5e29b6924c",
+      "name": "get all inactive workflows",
+      "credentials": {
+        "n8nApi": {
+          "id": "3N1mURaRanSDYYnV",
+          "name": "n8n account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "filters": {
+          "activeWorkflows": true
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [400, -940],
+      "id": "30102b45-b578-437a-a6b3-49b39c18d7fa",
+      "name": "get all active workflows",
+      "credentials": {
+        "n8nApi": {
+          "id": "3N1mURaRanSDYYnV",
+          "name": "n8n account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "filters": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [400, -780],
+      "id": "7eba5bb1-c863-4d0b-b157-5d5844860134",
+      "name": "get all workflows",
+      "credentials": {
+        "n8nApi": {
+          "id": "3N1mURaRanSDYYnV",
+          "name": "n8n account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "44f3564e-83bf-46fc-9de7-1c9179029967",
+              "leftValue": "={{ $('map parameters').item.json.mode }}",
+              "rightValue": "full",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [820, -1240],
+      "id": "cd37d7c6-0a39-4d0d-81d0-29b530834429",
+      "name": "full mode"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"status\": \"problem_getting_workflows\"\n}",
+        "options": {
+          "responseCode": 404
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [1320, -900],
+      "id": "47260845-2b55-47f2-a8ad-e4dc1d18a087",
+      "name": "return problem getting workflow error"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "53bb0221-a526-477f-bf31-7e26ad825f2b",
+              "leftValue": "={{ $json.workflowId }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [-420, -960],
+      "id": "5e8a5ddc-ce4c-4a4a-99ab-ade961a18158",
+      "name": "Does workflowId Exist"
+    },
+    {
+      "parameters": {
+        "content": "## 🚀 Workflow Trigger: Webhook\n\nThis workflow starts with a **Webhook node** that can be triggered by both `GET` and `POST` HTTP requests.\n\n**Authentication:**\n* Uses **Header Authentication**.\n* To set this up in n8n:\n    1.  Go to Credentials > New.\n    2.  Select \"Header Auth\".\n    3.  For the \"Name\" field (Header Name for Authentication), use `Authorization`.\n    4.  For the \"Value\" field (Header Value for Authentication), use `Bearer YOUR_STRONG_SECRET_KEY`. Replace `YOUR_STRONG_SECRET_KEY` with a secure key.\n* The webhook will respond using a dedicated **Respond to Webhook** node further down the flow, depending on the request type and outcome.\n\n**Path:** `workflow-manager`\n*(Remember to adjust the path in the Webhook node if needed for your setup.)*",
+        "height": 480,
+        "width": 580,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [-1780, -620],
+      "typeVersion": 1,
+      "id": "323d3126-fc6f-476f-978c-00f3c01f9e03",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## ▶️ POST Route: Execute a Target Workflow\n\nThis branch handles `POST` requests to dynamically execute another n8n workflow.\n\n### 1. Map Webhook Request to Fields:\n* Extracts `workflowId` from the incoming request's query parameters (e.g., `?workflowId=YOUR_TARGET_WORKFLOW_ID`).\n* Extracts the entire `body` of the POST request to be passed as `workflowInputData` to the target workflow.\n    * **Note:** If you send custom data in the body, ensure the triggered workflow is designed to receive and process it (e.g., via a \"Workflow data\" trigger node or by accessing `$json.workflowInputData` in its initial nodes).\n\n### 2. Execute Workflow:\n* The `workflowId` to execute is dynamically set using the value from the previous step:\n    `{{ $('Map webhook request to fields').item.json.targetWorkflowId }}`\n* **Wait for Completion:** This node is configured to wait until the sub-workflow (the one being executed) finishes before continuing.\n* Handles success and error responses separately.",
+        "height": 460,
+        "width": 740,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [-820, -160],
+      "typeVersion": 1,
+      "id": "941bf6d3-b6b3-4e1f-8c1e-4e52fd809881",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## 📄 GET Route: Fetch Workflow Info\n\nRetrieves n8n workflow details via `GET`. Uses n8n API (requires \"n8n API\" credentials).\n\n**Query Parameters:**\n\n* `workflowId=<ID>`: Fetches a single workflow by its ID.\n* `includedWorkflows=<active|inactive|all>`: If `workflowId` is absent, filters workflows by status. Defaults to `all`.\n* `mode=<full|summary>`:\n    * `full`: Returns complete workflow JSON.\n    * **Default (`summary` or other):** Returns key info (name, id, created/updated dates, active status).\n\n**Key Logic:**\n\n* The flow prioritizes `workflowId` if provided.\n* The `mode` parameter dictates the output verbosity.\n\nFor n8n API details: [https://docs.n8n.io/integrations/apis/n8n-api/](https://docs.n8n.io/integrations/apis/n8n-api/)",
+        "height": 480,
+        "width": 720,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [-380, -1480],
+      "typeVersion": 1,
+      "id": "d65a14e3-151e-4328-90a4-73cf4e845c52",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## 💡 Usage Example\n\nI used this workflow as the backend for a small Raycast extension. This extension lets me search and execute n8n workflows directly from Raycast.\n\nYou can check out the Raycast extension's code here:\n[n8n Manager for Raycast GitHub Repository](https://github.com/jwa91/n8n-manager-raycast/)",
+        "height": 240,
+        "width": 580
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [-1780, -120],
+      "typeVersion": 1,
+      "id": "f914af41-3f8f-4b0c-af7d-bad82aad6a29",
+      "name": "Sticky Note3"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "map parameters",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Map webhook request to fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Map webhook request to fields": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return problem handling request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow": {
+      "main": [
+        [
+          {
+            "node": "return succes message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "return problem executing workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Map key workflow info": {
+      "main": [
+        [
+          {
+            "node": "return summarized workflow info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "map parameters": {
+      "main": [
+        [
+          {
+            "node": "Does workflowId Exist",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return problem handling get request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get specific workflowid": {
+      "main": [
+        [
+          {
+            "node": "full mode",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "return problem getting workflow error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Included Workflows": {
+      "main": [
+        [
+          {
+            "node": "get all inactive workflows",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "get all active workflows",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "get all workflows",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "get all active workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get all inactive workflows": {
+      "main": [
+        [
+          {
+            "node": "full mode",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "return problem getting workflow error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get all active workflows": {
+      "main": [
+        [
+          {
+            "node": "full mode",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "return problem getting workflow error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get all workflows": {
+      "main": [
+        [
+          {
+            "node": "full mode",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "return problem getting workflow error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "full mode": {
+      "main": [
+        [
+          {
+            "node": "return all workflow info",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Map key workflow info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Does workflowId Exist": {
+      "main": [
+        [
+          {
+            "node": "Get specific workflowid",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Included Workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1eec3d74182f3fda9f29f20c85422320a70882840e1b07acd098d5b4a836392a"
+  }
+}

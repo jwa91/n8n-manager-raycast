@@ -4,7 +4,7 @@
 
 ## What is n8n Manager?
 
-_TODO_
+n8n Manager is a Raycast extension that lets you interact with your n8n.io workflows directly from the Raycast command bar. Search, filter, execute, and inspect your n8n workflows with speed and ease. It requires a companion workflow (installation detailed below) on your n8n instance to enable these management capabilities.
 
 ## Features
 
@@ -27,7 +27,8 @@ _TODO_
 This extension requires a special workflow in your n8n instance:
 
 1. Log into your n8n instance
-2. Import the [workflow-manager-template.json](https://creators.n8n.io/workflows/4166)
+2. Import the [workflow-manager.json](n8n-workflow/workflow-manager.json)
+   _Note: Template is under review at n8n, as soon as its available as a template, this link will be updated_
 3. Configure the workflow by following the instructions from the sticky notes
 4. Activate the workflow and note the webhook URL
 
