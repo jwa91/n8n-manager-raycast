@@ -1,8 +1,15 @@
 # n8n manager Changelog
 
+# [0.1.2] - 2025-05-18
+
+### Fixed
+
+- Corrected `README.md`, it now refers to official n8n template for workflow
+
 ## [0.1.1] - 2025-05-18
 
 ### Fixed
+
 - Corrected image paths in `README.md` to ensure they display properly on the Raycast Store.
 - Updated "Development Setup" instructions in `README.md` to use `npm` commands.
 
